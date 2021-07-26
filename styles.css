@@ -1,0 +1,79 @@
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    line-height: 2rem;
+}
+
+button {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+input {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+.item-interactions {
+    visibility: hidden;
+    display: flex;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    align-items: center;
+}
+
+.list-group-item:hover > .item-interactions {
+    visibility: visible;
+}
+
+/* For loading icon */
+.loader {
+    display: inline-block;
+    position: relative;
+    width: 65px;
+    height: 30px;
+}
+
+.loader div {
+    display: inline-block;
+    position: absolute;
+    width: 8px;
+    border-radius: 4px;
+    background: black;
+    animation: loader 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+.loader div:nth-child(1) {
+    left: 5px;
+    animation-delay: -0.24s;
+}
+
+.loader div:nth-child(2) {
+    left: 20px;
+    animation-delay: -0.12s;
+}
+
+.loader div:nth-child(3) {
+    left: 35px;
+    animation-delay: 0;
+}
+
+.loader div:nth-child(4) {
+    left: 50px;
+    animation-delay: 0.12s;
+}
+
+@keyframes loader {
+    0%, 100% {
+        top: 5px;
+        height: 8px;
+        opacity: 0.6;
+    }
+    10%, 60% {
+        height: 14px;
+    }
+    50% {
+        top: 20px;
+        height: 8px;
+        opacity: 1;
+    }
+}
