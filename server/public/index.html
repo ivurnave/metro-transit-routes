@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>Metro Stop Checker</title>
+        <link rel="shortcut icon" type="image/jpg" href="favicon.png"/>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -10,44 +11,38 @@
         <script src="main.js"></script>
     </head>
     <body>
-        <div class="m-3">
+        <div class="container-fluid">
             <h1 class="my-3">Metro Stop Checker</h1>
-            <div class="w-100 d-flex justify-content-left mb-3">
-                <!-- <input id="stopIdInput" type="text"> -->
-                <div class="d-flex">
+            <div class="row gx-0 mb-3">
+                <div class="col-sm-12 mb-3 mb-lg-0 col-lg-4 ">
                     <div class="input-group">
                         <input type="text" id="routeIdInput" class="form-control" placeholder="Route Number">
                         <button class="btn btn-warning" type="button" id="btnClearRoute" onclick="clearRoute()">Clear</button>
                         <button class="btn btn-primary" type="button" id="btnSetRoute" onclick="setRoute()">Set route</button>
                     </div>
-                    <div class="input-group ms-2">
+                </div>
+                <div class="col-sm-12 mb-3 mb-lg-0 col-lg-4">
+                    <div class="input-group ms-lg-2">
                         <input type="text" id="stopIdInput" class="form-control" placeholder="Stop number">
                         <button class="btn btn-primary" type="button" id="btnAddStop" onclick="addStop()">Add stop</button>
                     </div>
-                    <button class=" ms-2 btn btn-outline-primary text-nowrap" type="button" id="updateTime" onclick="updateTimes()">Update times</button>
-                    <div id="updateLoading" hidden class="ms-2">
-                        <div class="loader">
-                          <div></div>
-                          <div></div>
-                          <div></div>
-                          <div></div>
+                </div>
+                <div class="col-sm-12 mb-3 mb-lg-0 col-lg-4">
+                    <div class="d-flex flex-col ms-lg-2">
+                        <button class="btn btn-outline-primary text-nowrap ms-lg-2" type="button" id="updateTime" onclick="updateTimes()">Update times</button>
+                        <div id="updateLoading" hidden class="ms-2">
+                            <div class="loader">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
                         </div>
-                      </div>
+                    </div>
                 </div>
             </div>
             <ul id="times" class="list-group">
-                <li class="list-group-item d-flex">
-                    <span class="col-4">First bit of text</span>
-                    <span class="col-4">Second bit of text</span>
-                    <span class="col-4">Last bit of text</span>
-                    <div class="item-interactions">
-                        <button class="rounded me-2 btn btn-outline-danger">
-                            <span class="material-icons">
-                                delete_outline
-                            </span>
-                        </button>
-                    </div>
-                </li>
+                <!-- Times table goes here -->
             </ul>
         </div>
     </body>
