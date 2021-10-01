@@ -130,20 +130,20 @@ function buildListItem(stopId) {
     let data = stops[stopId];
     if (data) {
         let newStop = document.createElement('li');
-        newStop.className = 'list-group-item d-flex';
+        newStop.className = 'list-group-item d-flex row g-0';
         newStop.innerHTML = `
-            <span class="col-6"><b> ` + stopId + `:</b> ` + data.stopDesc + `</span>
-            <span class="col-6">Route `+ data.routeId + ` in ` + data.nextStop + `</span>
+            <span class="col-lg-6 col-sm-12 mb-2 mb-lg-0"><b> ` + stopId + `:</b> ` + data.stopDesc + `</span>
+            <span class="col-lg-6 col-sm-12 mb-2 mb-lg-0">Route `+ data.routeId + ` in ` + data.nextStop + `</span>
         `;
     
         if (!data.routeId) {
             newStop.innerHTML = `
-                <span class="col-6"><b> ` + stopId + `:</b> ` + data.stopDesc + `</span>
-                <span class="col-6">Stop closed</span>
+                <span class="col-lg-6 col-sm-12 mb-2 mb-lg-0"><b> ` + stopId + `:</b> ` + data.stopDesc + `</span>
+                <span class="col-lg-6 col-sm-12 mb-2 mb-lg-0 fst-italic">Stop closed</span>
             `;
         }
         newStop.innerHTML += 
-                `<div class="item-interactions">
+                `<div class="item-interactions ">
                     <button class="rounded me-2 btn btn-outline-danger" onclick="removeStop(` + stopId + `)">
                         <span class="material-icons">
                             delete_outline

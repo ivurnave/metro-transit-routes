@@ -12,14 +12,25 @@ input {
 }
 
 .item-interactions {
-    visibility: hidden;
     display: flex;
-    position: absolute;
-    top: 0;
-    right: 0;
     height: 100%;
     align-items: center;
+    /* justify-content: end; */
 }
+
+@media (min-width: 992px) {
+    .item-interactions {
+        visibility: hidden;
+        display: flex;
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        align-items: center;
+        justify-content: end;
+    }
+}
+
 
 .list-group-item:hover > .item-interactions {
     visibility: visible;
