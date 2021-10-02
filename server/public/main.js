@@ -86,6 +86,7 @@ function setRoute() {
     let routeId = elem.value;
     if (routeId && routeId > 1 && routeId < 1000) {
         route = routeId;
+        setRouteInStorage();
         updateTimes();
     }
 }
@@ -169,13 +170,34 @@ function getStopsFromStorage() {
     }
 }
 
+function setRouteInStorage() {
+    let data = JSON.stringify(route);
+    localStorage.setItem('route', data);
+}
+
+function getRouteFromStorage() {
+    const data = localStorage.getItem('route');
+    if (data) {
+        route = JSON.parse(data);
+    }
+}
+
+function setRouteInputElem() {
+    if (route) {
+        const routeInputElem = document.getElementById('routeIdInput');
+        routeInputElem.value = route;
+        updateTimes();
+    }
+}
+
 function setLoadingIcon(loading) {
-    // debugger;
     let loadingElem = document.getElementById('updateLoading');
     loadingElem.hidden = !loading;
 }
 
 window.onload = function () {
     getStopsFromStorage();
+    getRouteFromStorage();
+    setRouteInputElem();
     updateListFromStops();
 }
