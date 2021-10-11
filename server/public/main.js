@@ -64,7 +64,6 @@ function updateStopInfoForRoute(stopId) {
         let departure = stops[stopId].departures[i];
         if (departure.route_id === route) {
             stops[stopId].routeId = route;
-            stops[stopId].stopDesc = departure.description;
             stops[stopId].nextStop = departure.departure_text;
             break;
         }
@@ -93,6 +92,7 @@ function setRoute() {
 
 function clearRoute() {
     document.getElementById('routeIdInput').value = route = '';
+    localStorage.removeItem('route');
     updateTimes();
 }
 
@@ -132,29 +132,73 @@ function buildListItem(stopId) {
     if (data) {
         let newStop = document.createElement('li');
         newStop.className = 'list-group-item d-flex row g-0';
-        newStop.innerHTML = `
-            <span class="col-lg-6 col-sm-12 mb-2 mb-lg-0"><b> ` + stopId + `:</b> ` + data.stopDesc + `</span>
-            <span class="col-lg-6 col-sm-12 mb-2 mb-lg-0">Route `+ data.routeId + ` in ` + data.nextStop + `</span>
-        `;
+        if (!route && data.departures) {
+
+            let upcomingStopsInfo = '<table class="table table-striped route_list" id="stoplist_' + stopId + '"><thead><tr><th scope="col">Route</th><th scope="col">Departure time</th></tr></thead><tbody>';
+            data.departures.forEach( departure => {
+                upcomingStopsInfo += '<tr><th scope="row">' + departure.route_id + '</th><td>' + departure.departure_text + '</td></tr>';
+            });
+            upcomingStopsInfo += '</tbody></table>'
+
+
+            newStop.innerHTML = `
+                <div class="col-lg-4 col-sm-12 mb-2 mb-lg-0"><b> ` + stopId + `:</b> ` + data.stopDesc + `</div>
+                <div class="col-lg-8 col-sm-12 mb-2 mb-lg-0">
+                    <div class="input-group">
+                        <button class="form-control flex-row justify-content-start" onclick="toggleRow(` + stopId + `)">
+                            <b>Route ` + data.routeId + `:</b>&#9;` + data.nextStop + `
+                        </button>
+                        <button class="btn btn-outline-danger" onclick="removeStop(` + stopId + `)">
+                            <span class="material-icons">
+                                delete_outline
+                            </span>
+                        </button>
+                    </div>
+                    ` + upcomingStopsInfo + `
+                </div>`;
+        } else {
+            newStop.innerHTML = `
+                <div class="col-lg-4 col-sm-12 mb-2 mb-lg-0"><b> ` + stopId + `:</b> ` + data.stopDesc + `</div>
+                <div class="col-lg-8 col-sm-12 mb-2 mb-lg-0">
+                    <div class="input-group">
+                        <button class="form-control" disabled>` + data.routeId + ' -- ' + data.nextStop + `</button>
+                        <button class="btn btn-outline-danger" onclick="removeStop(` + stopId + `)">
+                            <span class="material-icons">
+                                delete_outline
+                            </span>
+                        </button>
+                    </div>
+                </div>`;
+        }
     
         if (!data.routeId) {
             newStop.innerHTML = `
-                <span class="col-lg-6 col-sm-12 mb-2 mb-lg-0"><b> ` + stopId + `:</b> ` + data.stopDesc + `</span>
-                <span class="col-lg-6 col-sm-12 mb-2 mb-lg-0 fst-italic">Stop closed</span>
-            `;
-        }
-        newStop.innerHTML += 
-                `<div class="item-interactions ">
-                    <button class="rounded me-2 btn btn-outline-danger" onclick="removeStop(` + stopId + `)">
-                        <span class="material-icons">
-                            delete_outline
-                        </span>
-                    </button>
+                <div class="col-lg-4 col-sm-12 mb-2 mb-lg-0"><b> ` + stopId + `:</b> ` + data.stopDesc + `</div>
+                <div class="col-lg-8 col-sm-12 mb-2 mb-lg-0">
+                    <div class="input-group">
+                        <button class="form-control fst-italic" disabled> Stop closed </button>
+                        <button class="btn btn-outline-danger" onclick="removeStop(` + stopId + `)">
+                            <span class="material-icons">
+                                delete_outline
+                            </span>
+                        </button>
+                    </div>
                 </div>`;
+        }
     
         return newStop;
     } else {
         return false;
+    }
+}
+
+function toggleRow(stopId) {
+    console.log(stopId);
+    let list = document.getElementById('stoplist_' + stopId);
+    if (list.classList.contains('active')) {
+        list.classList.remove('active');
+    } else {
+        list.classList.add('active');
     }
 }
 
