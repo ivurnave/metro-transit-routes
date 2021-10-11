@@ -11,11 +11,23 @@ input {
     font-family: 'Source Sans Pro', sans-serif;
 }
 
+.route_list {
+    display: none;
+    height: 0;
+    transition: ease-in-out;
+    max-height: 0;
+    overflow: hidden;
+}
+
+.route_list.active {
+    height: auto;
+    display: table;
+}
+
 .item-interactions {
     display: flex;
     height: 100%;
     align-items: center;
-    /* justify-content: end; */
 }
 
 @media (min-width: 992px) {
@@ -26,6 +38,7 @@ input {
         top: 0;
         right: 0;
         height: 100%;
+        width: 0px;
         align-items: center;
         justify-content: end;
     }
