@@ -161,7 +161,7 @@ function buildListItem(stopId) {
                 <div class="col-lg-4 col-sm-12 mb-2 mb-lg-0"><b> ` + stopId + `:</b> ` + data.stopDesc + `</div>
                 <div class="col-lg-8 col-sm-12 mb-2 mb-lg-0">
                     <div class="input-group">
-                        <button class="form-control" disabled>` + data.routeId + ' -- ' + data.nextStop + `</button>
+                        <button class="form-control" disabled><b>Route ` + data.routeId + `:</b>&#9;` + data.nextStop + `</button>
                         <button class="btn btn-outline-danger" onclick="removeStop(` + stopId + `)">
                             <span class="material-icons">
                                 delete_outline
@@ -239,7 +239,27 @@ function setLoadingIcon(loading) {
     loadingElem.hidden = !loading;
 }
 
+function toggleTheme() {
+    const theme = document.getElementById("theme-link");
+    if (theme.getAttribute("href") === "styles.css") {
+        theme.href = "darkStyles.css";
+        localStorage.setItem('darkThemeEnabled', 'true');
+    } else {
+        theme.href = "styles.css";
+        localStorage.setItem('darkThemeEnabled', 'false');
+    }
+}
+
+function getThemeFromStorage() {
+    const data = localStorage.getItem('darkThemeEnabled');
+    if (data === 'true') {
+        toggleTheme();
+        document.getElementById('themeToggle').checked = true;
+    }
+}
+
 window.onload = function () {
+    getThemeFromStorage();
     getStopsFromStorage();
     getRouteFromStorage();
     setRouteInputElem();
