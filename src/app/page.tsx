@@ -49,11 +49,11 @@ export default function Home() {
 				<h1 className="my-3 text-xl font-semibold">Metro Stop Checker</h1>
 			</div>
 
-			<div className="flex flex-row justify-left">
+			<div className="flex flex-row min-w-max justify-left">
 				{/* Input Form */}
-				<div>
-					<InputForm onAddStop={addStop} onSetRoute={setRoute} />
-					<Loader />
+				<InputForm onAddStop={addStop} onSetRoute={setRoute} />
+				<Loader />
+				<div className="flex min-w-max">
 				</div>
 
 				{/* Route Number */}

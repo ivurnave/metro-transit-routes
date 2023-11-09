@@ -1,23 +1,29 @@
 {
-  "name": "server",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "name": "metro-transit-routes",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/server.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
-    "react": "^18.2.0"
-  },
-  "engines": {
-    "node": "14.5.0"
+    "next": "14.0.0",
+    "react": "^18",
+    "react-dom": "^18"
   },
   "devDependencies": {
-    "gh-pages": "^6.0.0"
+    "@tailwindcss/forms": "^0.5.6",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.0",
+    "postcss": "^8",
+    "postcss-import": "^15.1.0",
+    "tailwindcss": "^3",
+    "typescript": "^5"
   }
 }
