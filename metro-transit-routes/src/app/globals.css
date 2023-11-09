@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* :root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+} */
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+/* body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+} */
+
+@layer components {
+  .btn {
+    @apply py-2 px-4 font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+
+    &.btn-primary {
+      @apply text-white bg-blue-500 hover:bg-blue-600 focus:ring-blue-400;
+    }
+
+    &.btn-secondary {
+      @apply text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-gray-400;
+    }
+
+    &.btn-tertiary {
+      @apply text-gray-700 bg-gray-100 hover:bg-gray-200 focus:ring-gray-400;
+    }
+
+    &.btn-danger {
+      @apply text-white bg-red-500 hover:bg-red-600 focus:ring-red-400;
+    }
+
+    &.btn-link {
+      @apply text-blue-500 bg-transparent hover:bg-blue-100 focus:ring-blue-400;
+    }
+  }
+
+  .form-input {
+    @apply py-2 px-4 font-semibold rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+  }
+
+}
