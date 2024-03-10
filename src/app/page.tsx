@@ -7,15 +7,17 @@ import { MetroStopDictionary } from "@/models/metro-stop";
 import MetroTransitApiService from "@/services/metro-transit-api-service";
 import { MetroTimesTable } from "./components/metro-times-table";
 import { DropdownItem } from "./components/dropdown-with-search";
+import { useMetroRoutes } from "./context/metro-routes-context";
 
 export default function Home() {
 
-	const [availableRoutes, setAvailableRoutes] = useState<DropdownItem[]>([]);
-	const [availableStops, setAvailableStops] = useState<DropdownItem[]>([]);
+	const metroTransitApiService = useMemo(() => new MetroTransitApiService(), []);
+	const state = useMetroRoutes();
 
 	const setRoute = (route: string) => {
-		if (route === '') setCurrentRoute('');
-		else setCurrentRoute(parseInt(route));
+		// if (route === '') setCurrentRoute('');
+		// else setCurrentRoute(parseInt(route));
+		state.setRoute(route);
 	};
 
 	const addStop = async (stop: string) => {
@@ -39,35 +41,19 @@ export default function Home() {
 		}
 	};
 
-	const metroTransitApiService = useMemo(() => new MetroTransitApiService(), []);
-
-	useEffect(() => {
-		if (metroTransitApiService) {
-			const fetchRouteData = async () => {
-				const routes = await metroTransitApiService.getRoutes();
-				console.log(routes)
-				setAvailableRoutes(routes.map((route) => {
-					return {
-						label: route.label,
-						value: route.id.toString()
-					}
-				}).sort( (a,b) => parseInt(a.value) - parseInt(b.value)));
-			};
-	
-			const fetchStopData = async () => {
-				const stops = await metroTransitApiService.getStops();
-				setAvailableStops(stops.map((stop) => {
-					return {
-						label: stop.stopId.toString(),
-						value: stop.stopDesc
-					}
-				}).sort());
-			};
-	
-			fetchRouteData();
-			fetchStopData();
+	const availableRoutes = state.routes.map((route) => {
+		return {
+			label: route.label,
+			value: route.id.toString()
 		}
-	}, [metroTransitApiService]);
+	}).sort( (a,b) => parseInt(a.value) - parseInt(b.value))
+
+	const availableStops = state.stops.map((stop) => {
+		return {
+			label: stop.stopId.toString(),
+			value: stop.stopDesc
+		}
+	}).sort();
 
 	const [currentRoute, setCurrentRoute] = useState<number | ''>('');
 	const [currentStops, setCurrentStops] = useState<MetroStopDictionary>({});
