@@ -62,7 +62,7 @@ export function DropdownWithSearch(props: DropdownWithSearchProps) {
                 onChange={handleSearch}
                 value={inputValue}
                 />
-            { true
+            { isOpen
                 ? <div className="absolute flex flex-col top-12 w-full bg-white z-20 max-h-96 overflow-auto shadow-lg rounded p-2">
                     {
                         options.map((option) => <button
