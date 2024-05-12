@@ -40,7 +40,8 @@ export function MetroRoutesConfigProvider(props: MetroRoutesContextProps) {
 
     /** Update globally loaded stops, return them */
     const getStops = useCallback(async () => {
-        const stops = await metroTransitService.getStops();
+        // const stops = await metroTransitService.getStops();
+        const stops: MetroStop[] = [];
         setStops(stops);
 
         return stops;

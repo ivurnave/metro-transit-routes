@@ -1,6 +1,4 @@
 'use client'
-
-import { useState } from "react";
 import { DropdownItem, DropdownWithSearch } from "./dropdown-with-search";
 
 export interface InputFormProps {

@@ -62,11 +62,11 @@ export function DropdownWithSearch(props: DropdownWithSearchProps) {
                 onChange={handleSearch}
                 value={inputValue}
                 />
-            { isOpen
-                ? <div className="absolute flex flex-col top-12 w-full bg-white z-20 max-h-96 overflow-auto">
+            { true
+                ? <div className="absolute flex flex-col top-12 w-full bg-white z-20 max-h-96 overflow-auto shadow-lg rounded p-2">
                     {
                         options.map((option) => <button
-                            className="btn p-2"
+                            className="btn p-2 shadow-transparent hover:bg-slate-200 focus:bg-slate-200"
                             key={option.value}
                             onClick={() => {handleSelection(option)}} >
                             {option.label}
@@ -75,8 +75,6 @@ export function DropdownWithSearch(props: DropdownWithSearchProps) {
                     {
                         options.length === 0 ? <button className="btn p-2" disabled>No results found</button> : <></>
                     }
-                    {/* <div className="flex flex-col">
-                    </div> */}
                 </div> : <></>
             }
 

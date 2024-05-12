@@ -18,8 +18,8 @@ export default class MetroTransitApiService {
     async getStopsForRoute(routeId: string, direction = '0'): Promise<MetroStop[]> {
         const response = await HttpService.get<MetroStopResponse[]>(this.apiUrl + `stops/${routeId}/${direction}`);
 
-        return response.map( stopRaw => this.getStopFromResponse(stopRaw., stopRaw));
-        // return Promise.resolve([]);
+        // return response.map( stopRaw => this.getStopFromResponse(stopRaw, stopRaw));
+        return Promise.resolve([]);
     }
 
     async getTimeForId(id: number): Promise<MetroStop> {
