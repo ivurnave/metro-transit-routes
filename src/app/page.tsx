@@ -11,52 +11,29 @@ import { useMetroRoutes } from "./context/metro-routes-context";
 
 export default function Home() {
 
-	const metroTransitApiService = useMemo(() => new MetroTransitApiService(), []);
-	const state = useMetroRoutes();
+	const metroAppState = useMetroRoutes();
 
 	const setRoute = (route: string) => {
-		// if (route === '') setCurrentRoute('');
-		// else setCurrentRoute(parseInt(route));
-		state.setRoute(route);
+		metroAppState.setRoute(route);
 	};
 
-	const addStop = async (stop: string) => {
-		const stopNumber = parseInt(stop);
-		if (Number.isNaN(stopNumber)) return;
-		else {
-			const newStops: MetroStopDictionary = currentStops;
-			if (newStops[stopNumber] === undefined) {
-				newStops[stopNumber] = {
-					stopId: stopNumber,
-					stopDesc: '',
-					departures: []
-				};
-			}
-			setCurrentStops({...newStops});
+	const addStop = (stop: string) => {
+		metroAppState.addStop(stop);
+	}
 
-			// Update the state once we get the data
-			const stopData = await metroTransitApiService.getTimeForId(stopNumber);
-			newStops[stopNumber] = stopData;
-			setCurrentStops({...newStops});
-		}
-	};
-
-	const availableRoutes = state.routes.map((route) => {
+	const availableRoutes = metroAppState.routes.map((route) => {
 		return {
 			label: route.label,
 			value: route.id.toString()
 		}
 	}).sort( (a,b) => parseInt(a.value) - parseInt(b.value))
 
-	const availableStops = state.stops.map((stop) => {
+	const availableStops = metroAppState.stopSummaries.map((stop) => {
 		return {
-			label: stop.stopId.toString(),
-			value: stop.stopDesc
+			label: stop.description,
+			value: stop.place_code
 		}
 	}).sort();
-
-	const [currentRoute, setCurrentRoute] = useState<number | ''>('');
-	const [currentStops, setCurrentStops] = useState<MetroStopDictionary>({});
 
 	return (
 		<main className="flex max-h-screen flex-col justify-start m-4">
@@ -77,11 +54,11 @@ export default function Home() {
 
 				{/* Route Number */}
 				<div className="flex shadow-md content-center justify-center min-h-full min-w-max w-32 text-4xl font-semibold border-solid rounded-lg border-2 flex-wrap">
-					{currentRoute ? currentRoute : "--"}
+					{metroAppState.currentRoute?.id ? metroAppState.currentRoute.id : "--"}
 				</div>
 			</div>
 
-			<MetroTimesTable data={currentStops}/>
+			<MetroTimesTable data={metroAppState.currentStops}/>
 		</main>
 	)
 }

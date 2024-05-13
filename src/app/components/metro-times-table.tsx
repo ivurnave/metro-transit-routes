@@ -12,7 +12,7 @@ export function MetroTimesTable(props: MetroTimesTableProps) {
     return (
         <ul>
             {/* Times table */}
-            { Object.keys(props.data).map((stopId: string) => props.data[parseInt(stopId)]).map((stop: MetroStop) => {
+            { Object.keys(props.data).map((stopId: string) => props.data[stopId]).map((stop: MetroStop) => {
                 return <MetroTimesTableItem key={stop.stopId} data={stop} />
             })}
         </ul>

@@ -1,7 +1,12 @@
 export interface MetroStop {
-    stopId: number;
+    stopId: number | string;
     stopDesc: string;
     departures: MetroStopDeparture[];
+}
+
+export interface MetroStopSummary {
+    place_code: string;
+    description: string;
 }
 
 export interface MetroStopDeparture {
@@ -32,5 +37,5 @@ export interface MetroStopResponseDeparture {
 }
 
 export interface MetroStopDictionary {
-    [key: number]: MetroStop;
+    [key: number | string]: MetroStop;
 }

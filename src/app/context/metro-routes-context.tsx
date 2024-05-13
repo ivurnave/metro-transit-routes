@@ -1,73 +1,113 @@
 'use client'
 
 import { MetroRoute } from "@/models/metro-route";
-import { MetroStop } from "@/models/metro-stop";
+import { MetroStop, MetroStopDictionary, MetroStopSummary } from "@/models/metro-stop";
+import metroTransitApiService from "@/services/metro-transit-api-service";
 import MetroTransitApiService from "@/services/metro-transit-api-service";
-import React, { useState, useContext, useEffect, useCallback } from "react";
+import React, { useState, useContext, useEffect, useCallback, useMemo } from "react";
 
 export const MetroRoutesContext = React.createContext<MetroRoutesState>({
     routes: [],
-    stops: [],
+    // stops: [],
+    stopSummaries: [],
+    currentStops: {},
+    currentRoute: undefined,
     setRoute: (route: string) => { },
     getRoutes: () => { return new Promise<MetroRoute[]>(() => { }) },
-    getStops: (id: string, direction: number) => { return new Promise<MetroStop[]>(() => { }) },
+    getStopsForCurrentRoute: () => { return new Promise<MetroStopSummary[]>(() => { }) },
+    addStop: (stop: string) => { },
 });
 
 /** The value we provide via context (i.e. the value and a setter of state) */
 export interface MetroRoutesState {
     routes: MetroRoute[];
-    stops: MetroStop[];
+    // stops: MetroStop[];
+    currentRoute?: MetroRoute;
+    currentStops: MetroStopDictionary;
+    stopSummaries: MetroStopSummary[];
     setRoute: (route: string) => void;
     getRoutes: () => Promise<MetroRoute[]>;
-    getStops: (routeId: string, direction: number) => Promise<MetroStop[]>;
+    getStopsForCurrentRoute: () => Promise<MetroStopSummary[]>;
+    addStop: (stop: string) => void;
 }
 
 export interface MetroRoutesContextProps { children?: React.ReactNode }
 export function MetroRoutesConfigProvider(props: MetroRoutesContextProps) {
-    const metroTransitService = new MetroTransitApiService();
+    const metroTransitService = useMemo(() => new MetroTransitApiService(), []);
 
-    const [routes, setRoutes] = useState<MetroRoute[]>([])
-    const [stops, setStops] = useState<MetroStop[]>([])
+    const [routes, setRoutes] = useState<MetroRoute[]>([]);
+    // const [stops, setStops] = useState<MetroStop[]>([]);
     const [currentRoute, setCurrentRoute] = useState<MetroRoute>();
+    const [stopSummaries, setStopSummaries] = useState<MetroStopSummary[]>([]);
+    const [currentStops, setCurrentStops] = useState<MetroStopDictionary>({});
 
-    /** Update globally loaded routes, return them */
-    const getRoutes = useCallback( async () => {
+     /** Update globally loaded routes, return them */
+     const getRoutes = async () => {
         const routes = await metroTransitService.getRoutes();
         setRoutes(routes);
 
         return routes;
-    }, []);
+    };
 
-    /** Update globally loaded stops, return them */
-    const getStops = useCallback(async () => {
-        // const stops = await metroTransitService.getStops();
-        const stops: MetroStop[] = [];
-        setStops(stops);
+    const getStopsForCurrentRoute = async () => {
+        if (currentRoute) {
+            return await metroTransitService.getStopsForRoute(currentRoute.id.toString(), '1');
+        }
+        return [];
+    };
 
-        return stops;
-    }, [routes]);
+    const setRoute = (route: string) => {
+        if (route === '') {
+            setCurrentRoute(undefined);
+            setStopSummaries([]);
+        } else {
+            setCurrentRoute(routes.find((r) => r.id.toString() === route));
+        }
+    };
 
-    const setRoute = useCallback( (route: string) => {
-        if (route === '') setCurrentRoute(undefined);
-        else setCurrentRoute(routes.find((r) => r.id.toString() === route));
-    }, [routes]);
+    const addStop = async (stop: string) => {
+        if (!currentRoute) return;
+		
+        const newStops: MetroStopDictionary = currentStops;
+        if (newStops[stop] === undefined) {
+            newStops[stop] = {
+                stopId: stop,
+                stopDesc: '',
+                departures: []
+            };
+        }
+        setCurrentStops({...newStops});
+
+        // Update the state once we get the data
+        const stopData = await metroTransitService.getTimeForIdWithRoute(stop, currentRoute.id.toString() || '', '1');
+        newStops[stop] = stopData;
+        setCurrentStops({...newStops});
+	};
 
     // Load routes on first render
     useEffect(() => {
         getRoutes();
     }, [])
 
+    // Update available stops when the current route changes
     useEffect(() => {
-        if (currentRoute) {
-            // metroTransitService.getStopsForRoute(currentRoute.id.toString(), 1).then((stops) => {
-            //     setStops(stops);
-            // })
-            console.log('current route changed')
-        }
+        getStopsForCurrentRoute().then((stops) => {
+            setStopSummaries(stops);
+        });
     }, [currentRoute])
 
     return (
-        <MetroRoutesContext.Provider value={{ routes, stops, setRoute, getRoutes, getStops }}>
+        <MetroRoutesContext.Provider value={{
+            routes,
+            // stops,
+            currentStops,
+            addStop,
+            currentRoute,
+            stopSummaries,
+            setRoute,
+            getRoutes,
+            getStopsForCurrentRoute
+        }}>
             {props.children}
         </MetroRoutesContext.Provider>
     )

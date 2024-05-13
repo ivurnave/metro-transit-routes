@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 export interface DropdownWithSearchProps {
     options: DropdownItem[];
     placeholder: string;
+    selectedValue?: DropdownItem;
     onSelected: (selected: DropdownItem) => void;
 }
 export interface DropdownItem {
@@ -12,9 +13,8 @@ export interface DropdownItem {
 }
 
 export function DropdownWithSearch(props: DropdownWithSearchProps) {
-
     const [options, setOptions] = useState<DropdownItem[]>(props.options);
-    const [inputValue, setInputValue] = useState<string>('');
+    const [inputValue, setInputValue] = useState<string>(props.selectedValue?.label || '');
     const [isOpen, setIsOpen] = useState(false);
     const optionsCopy = props.options;
 
@@ -49,9 +49,9 @@ export function DropdownWithSearch(props: DropdownWithSearchProps) {
 
     const handleCloseDropdown = (event: React.FocusEvent) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
-          setIsOpen(false);  
+            setIsOpen(false);  
         }
-      }
+    }
     
 
     return (
@@ -73,7 +73,7 @@ export function DropdownWithSearch(props: DropdownWithSearchProps) {
                         </button>)
                     }
                     {
-                        options.length === 0 ? <button className="btn p-2" disabled>No results found</button> : <></>
+                        options.length === 0 ? <button className="btn p-2 shadow-transparent" disabled>No results found</button> : <></>
                     }
                 </div> : <></>
             }

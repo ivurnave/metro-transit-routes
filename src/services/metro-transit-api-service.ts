@@ -1,4 +1,4 @@
-import { MetroStop, MetroStopDeparture, MetroStopResponse } from "@/models/metro-stop";
+import { MetroStop, MetroStopDeparture, MetroStopResponse, MetroStopSummary } from "@/models/metro-stop";
 import HttpService from "./http-service";
 import { MetroRoute, MetroRouteResponse } from "@/models/metro-route";
 
@@ -15,17 +15,21 @@ export default class MetroTransitApiService {
     }
 
     // To load stops for route, a route id and direction are required
-    async getStopsForRoute(routeId: string, direction = '0'): Promise<MetroStop[]> {
-        const response = await HttpService.get<MetroStopResponse[]>(this.apiUrl + `stops/${routeId}/${direction}`);
-
-        // return response.map( stopRaw => this.getStopFromResponse(stopRaw, stopRaw));
-        return Promise.resolve([]);
+    async getStopsForRoute(routeId: string, direction = '0'): Promise<MetroStopSummary[]> {
+        const response = await HttpService.get<MetroStopSummary[]>(this.apiUrl + `stops/${routeId}/${direction}`);
+        return response;
     }
 
-    async getTimeForId(id: number): Promise<MetroStop> {
+    async getTimeForId(id: number | string): Promise<MetroStop> {
         const response = await HttpService.get<MetroStopResponse>(this.apiUrl + id);
         
         return this.getStopFromResponse(id, response);
+    }
+
+    async getTimeForIdWithRoute(stopId: string, routeId: string, direction: string): Promise<MetroStop> {
+        const response = await HttpService.get<MetroStopResponse>(this.apiUrl + `${routeId}/${direction}/${stopId}`);
+
+        return this.getStopFromResponse(stopId, response);
     }
 
     private getRouteFromResponse(response: MetroRouteResponse): MetroRoute {
@@ -35,7 +39,7 @@ export default class MetroTransitApiService {
         };
     }
 
-    private getStopFromResponse(id: number, response: MetroStopResponse): MetroStop {
+    private getStopFromResponse(id: number | string, response: MetroStopResponse): MetroStop {
         const departures = response.departures.map((departure): MetroStopDeparture => {
             return {
                 routeId: departure.route_id,
