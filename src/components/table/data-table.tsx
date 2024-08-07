@@ -1,6 +1,5 @@
-'use client'
-
 import { MetroStopDeparture } from "@/models/metro-stop"
+import { DataTableItem } from "./data-table-item";
 
 interface DataTableProps {
     data: MetroStopDeparture[]
@@ -20,27 +19,10 @@ export function DataTable(props: DataTableProps) {
                     </tr>
                 </thead>
                 <tbody>
-                    { data.map((departure: MetroStopDeparture) => {
+                    { data?.map((departure: MetroStopDeparture) => {
                         return <DataTableItem key={departure.arrivalTime} data={departure} />
                     })}
                 </tbody>
             </table>
         )
-}
-
-interface DataTableItemProps {
-    data: MetroStopDeparture
-}
-
-export function DataTableItem(props: DataTableItemProps) {
-
-    const { data } = props;
-
-    return (
-        <tr className="odd:bg-white even:bg-gray-200">
-            <th className="p-4" scope="row">{data.routeId}</th>
-            <td className="p-4">{data.arrivalTime}</td>
-            <td className="p-4">{data.description}</td>
-        </tr>
-    )
 }

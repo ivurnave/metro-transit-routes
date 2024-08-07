@@ -15,10 +15,6 @@ export interface MetroStopDeparture {
     description: string;
 }
 
-export interface MetroStopRequest {
-
-}
-
 export interface MetroStopResponse {
     alerts: any[];
     stops: MetroStopResponseDetails[];

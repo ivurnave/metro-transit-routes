@@ -1,5 +1,5 @@
 
-import {useEffect, useState} from "react";
+import { useState} from "react";
 
 export interface DropdownWithSearchProps {
     options: DropdownItem[];
@@ -13,19 +13,11 @@ export interface DropdownItem {
 }
 
 export function DropdownWithSearch(props: DropdownWithSearchProps) {
-    const [options, setOptions] = useState<DropdownItem[]>(props.options);
     const [inputValue, setInputValue] = useState<string>(props.selectedValue?.label || '');
     const [isOpen, setIsOpen] = useState(false);
-    const optionsCopy = props.options;
-
-    useEffect( () => {
-        setOptions(props.options);
-    }, [props.options] )
-
+    const filteredOptions = props.options.filter((option) => option.label.toLowerCase().includes(inputValue.toLowerCase()));
 
     const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const filteredOptions = optionsCopy.filter((option) => option.label.toLowerCase().includes(event.target.value.toLowerCase()));
-        setOptions(filteredOptions);
         setInputValue(event.currentTarget.value);
     }
 
@@ -65,7 +57,7 @@ export function DropdownWithSearch(props: DropdownWithSearchProps) {
             { isOpen
                 ? <div className="absolute flex flex-col top-12 w-full bg-white z-20 max-h-96 overflow-auto shadow-lg rounded p-2">
                     {
-                        options.map((option) => <button
+                        filteredOptions.map((option) => <button
                             className="btn p-2 shadow-transparent hover:bg-slate-200 focus:bg-slate-200"
                             key={option.value}
                             onClick={() => {handleSelection(option)}} >
@@ -73,7 +65,7 @@ export function DropdownWithSearch(props: DropdownWithSearchProps) {
                         </button>)
                     }
                     {
-                        options.length === 0 ? <button className="btn p-2 shadow-transparent" disabled>No results found</button> : <></>
+                        filteredOptions.length === 0 ? <button className="btn p-2 shadow-transparent" disabled>No results found</button> : <></>
                     }
                 </div> : <></>
             }
