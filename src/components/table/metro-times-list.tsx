@@ -1,16 +1,12 @@
-'use client'
-import { MetroTimesListItem } from "./metro-times-table-item";
+'use client';
+import { MetroTimesListItem } from './metro-times-table-item';
 
-export function MetroTimesList(props: {stops: string[]}) {
-
-    console.log(props)
-
+export function MetroTimesList(props: { stops: string[] }) {
     return (
         <ul>
-            {/* Times table */}
-            { props.stops.map((stopId: string) => {
-                return <MetroTimesListItem key={stopId} stopId={stopId}/>
+            {props.stops.map((stopId: string) => {
+                return <MetroTimesListItem key={stopId} stopId={stopId} />;
             })}
         </ul>
-    )
+    );
 }

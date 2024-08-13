@@ -1,24 +1,12 @@
-export interface MetroStop {
-    stopId: number | string;
-    stopDesc: string;
-    departures: MetroStopDeparture[];
-}
-
 export interface MetroStopSummary {
     place_code: string;
     description: string;
 }
 
-export interface MetroStopDeparture {
-    routeId: string;
-    arrivalTime: string;
-    description: string;
-}
-
-export interface MetroStopResponse {
+export interface MetroStop {
     alerts: any[];
     stops: MetroStopResponseDetails[];
-    departures: MetroStopResponseDeparture[];
+    departures: MetroStopDeparture[];
 }
 
 export interface MetroStopResponseDetails {
@@ -26,12 +14,17 @@ export interface MetroStopResponseDetails {
     description: string;
 }
 
-export interface MetroStopResponseDeparture {
+export interface MetroStopDeparture {
+    actual: boolean;
+    trip_id: string;
+    stop_id: number;
     departure_text: string;
-    route_id: string;
+    departure_time: number;
     description: string;
-}
-
-export interface MetroStopDictionary {
-    [key: number | string]: MetroStop;
+    route_id: string;
+    route_short_name: string;
+    direction_id: number;
+    direction_text: string;
+    terminal: string;
+    schedule_relationship: string;
 }
